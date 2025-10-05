@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foro Universitario</title>
+  <link rel="icon" href="https://win98icons.alexmeub.com/icons/png/address_book_users.png" type="image/x-icon">
+
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --card: #141414;
+      --accent: #4db6ac;
+      --text: #f0f0f0;
+      --muted: #aaa;
+      --link: #ffd54f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      background-image: radial-gradient(circle at top center, #1a1a1a 0%, #000 100%);
+    }
+
+    header, section, footer {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    h1, h2, h3 { color: var(--accent); font-weight: 700; }
+
+    /* Header */
+    .banner {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(77, 182, 172, 0.4);
+    }
+
+    .welcome {
+      font-size: 3rem;
+      color: var(--accent);
+      text-align: center;
+      margin: 20px 0;
+      text-shadow: 0 0 10px var(--accent);
+    }
+
+    /* Navegación */
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    nav a {
+      color: var(--link);
+      text-decoration: none;
+      font-size: 18px;
+      padding: 8px 16px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* Buscador */
+    .search-box { text-align: center; margin-bottom: 25px; }
+
+    input[type="text"] {
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: 1px solid var(--accent);
+      background-color: #111;
+      color: white;
+      width: 280px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      background-color: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #6fd4c8;
+      box-shadow: 0 0 8px #6fd4c8;
+    }
+
+    /* Layout principal */
+    main {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    /* Tarjetas */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+      margin-bottom: 25px;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(77, 182, 172, 0.2);
+    }
+
+    /* Publicaciones */
+    .post {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      border-bottom: 1px solid #333;
+      padding: 15px 0;
+      cursor: pointer;
+    }
+
+    .post img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+    }
+
+    .post-content h4 { color: var(--link); }
+    .post-content p { color: var(--muted); font-size: 15px; }
+    .post-meta { font-size: 13px; color: var(--muted); margin-top: 5px; }
+
+    /* Sidebar */
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .sidebar-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-card h3 { color: var(--link); margin-bottom: 10px; }
+    .sidebar-card li { margin: 8px 0; color: var(--muted); list-style: none; }
+
+    /* Footer */
+    footer {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #333;
+    }
+
+    footer a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-content {
+      background: var(--card);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      position: relative;
+      text-align: left;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .reactions { margin-top: 15px; }
+
+    .reactions button {
+      background: rgba(255,255,255,0.05);
+      margin-right: 10px;
+      padding: 8px 12px;
+      border-radius: 20px;
+    }
+
+    .comment-box {
+      margin-top: 15px;
+    }
+
+    .comment-box textarea {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: #111;
+      color: #fff;
+      padding: 10px;
+      resize: none;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover { background: #6fd4c8; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img class="banner" src="https://grid-paint.com/images/png/2016/04/15/5956646605946880.png" alt="Logo Universidad">
+    <h1 class="welcome">Foro Universitario - Comunidad Estudiantil</h1>
+
+    <div class="search-box">
+      <form action="#" method="get">
+        <input type="text" id="search" name="q" placeholder="Buscar temas o usuarios...">
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+
+    <nav>
+      <a href="#">Inicio</a>
+      <a href="#">Académico</a>
+      <a href="#">Becas</a>
+      <a href="#">Vida Universitaria</a>
+      <a href="#">Recursos</a>
+      <a href="#">Miembros</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <div class="card">
+        <h2>📚 Asuntos Académicos</h2>
+
+        <!-- Publicación de ejemplo -->
+        <div class="post" onclick="openPost()">
+          <img src="https://i.pravatar.cc/100?img=8" alt="Avatar usuario">
+          <div class="post-content">
+            <h4>Consejos para organizar el tiempo en parciales</h4>
+            <p>¿Alguien tiene un método efectivo para estudiar sin saturarse?</p>
+            <div class="post-meta">Publicado por <strong>MariaC</strong> • 4 Oct 2025</div>
+          </div>
+        </div>
+		<br>
+		<button type="submit">Publicar un nuevo tema</button>
+      </div>
+
+      <div class="card">
+        <h2>🎓 Becas y oportunidades</h2>
+        <p>Convocatorias actuales, requisitos y experiencias compartidas por otros estudiantes.</p>
+		<br>
+		<button type="submit">Publicar un nuevo tema</button>
+      </div>
+
+      <div class="card">
+        <h2>💬 Vida Universitaria</h2>
+        <p>Comparte tus experiencias, eventos, grupos estudiantiles o actividades extracurriculares.</p>
+		<br>
+		<button type="submit">Publicar un nuevo tema</button>
+      </div>
+    </section>
+
+    <aside>
+      <div class="sidebar-card">
+        <h3>🔥 Temas Populares</h3>
+        <ul>
+          <li>- Organización del tiempo</li>
+          <li>- Becas internacionales</li>
+          <li>- Vida en residencia</li>
+          <li>- Consejos para primer semestre</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>🧍 Miembros Activos</h3>
+        <ul>
+          <li>Maria_C</li>
+          <li>Kevin@Tech</li>
+          <li>Laura..3st</li>
+          <li>Ana_Lisa_V</li>
+          <li>Daniel$$Reads</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>📢 Noticias Recientes</h3>
+        <ul>
+          <li><a href="https://www.guatemala.com/noticias/sociedad/calendario-pruebas-de-conocimientos-basicos-usac-2026-y-pruebas-especificas.html">¡Semana de innovación universitaria 2026!</li></a>
+          <li><a href="https://humanidades.usac.edu.gt/usac/wp-content/uploads/2012/08/horaulario-pedagogia.pdf">Se amplía el horario de biblioteca</li></a>
+          <li><a href="https://cursoslibres.usac.edu.gt/">Taller gratuito de oratoria el 10 de octubre</li></a>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <p><a href="#">El equipo</a> • <a href="#">Términos</a> • <a href="#">Privacidad</a></p>
+    <p>Powered by <strong>CampusNet</strong> © 2025 Comunidad Universitaria</p>
+  </footer>
+
+  <!-- Ventana modal -->
+  <div id="postModal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closePost()">×</button>
+      <h3>Consejos para organizar el tiempo en parciales</h3>
+      <p>
+        Muchos estamos en la misma situación antes de los parciales. Algunos consejos que me han servido:
+        dividir el contenido por días, usar técnicas Pomodoro y hacer pausas activas.  
+        ¿Qué estrategias usan ustedes?
+      </p>
+
+      <div class="reactions">
+        <button>👍 Me gusta</button>
+        <button>❤️ Me encanta</button>
+        <button>💬 Comentar</button>
+      </div>
+
+      <div class="comment-box">
+        <textarea placeholder="Escribe tu opinión..."></textarea><br>
+        <button>Publicar</button>
+      </div>
+
+      <a href="#" class="back-btn" onclick="closePost()">⬅ Volver al foro</a>
+    </div>
+  </div>
+
+  <script>
+    function openPost() {
+      document.getElementById('postModal').style.display = 'flex';
+    }
+
+    function closePost() {
+      document.getElementById('postModal').style.display = 'none';
+    }
+  </script>
+  
+</body>
+</html>
